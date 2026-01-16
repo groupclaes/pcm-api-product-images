@@ -12,4 +12,4 @@ const main = async function () {
   })
 }
 
-main()
+main().then()

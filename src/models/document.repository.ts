@@ -1,5 +1,5 @@
-import sql from 'mssql'
 import { FastifyBaseLogger } from 'fastify'
+import sql from 'mssql'
 
 export default class Document {
   schema: string = 'document.'
@@ -11,8 +11,12 @@ export default class Document {
     this._pool = pool
   }
 
-  async getGuidByParams(company: string, objecttype: string, documenttype: string, itemnum: string, language: string, size: string): Promise<{ error?: string | null, verified?: boolean, result: any }> {
-    const r = new sql.Request(this._pool)
+  async getGuidByParams(company: string, objecttype: string, documenttype: string, itemnum: string, language: string, size: string): Promise<{
+    error?: string | null,
+    verified?: boolean,
+    result: any
+  }> {
+    const r = this._pool.request()
     r.input('company', sql.VarChar, company)
     r.input('objecttype', sql.VarChar, objecttype)
     r.input('documenttype', sql.VarChar, documenttype)

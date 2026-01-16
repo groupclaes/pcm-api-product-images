@@ -1,6 +1,8 @@
 #Product-image Controller
 
-retrieves all documents marked as article / foto from any desired company
+retrieves all documents marked as article / foto from any desired company  
+  
+https://pcm.groupclaes.be/v5/product-images/1241221400?s=small  
 
 base url: /product-images/${company}/${productId}
 prefered url: /product-images/${guid}
