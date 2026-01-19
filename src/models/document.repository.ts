@@ -2,7 +2,6 @@ import { FastifyBaseLogger } from 'fastify'
 import sql from 'mssql'
 
 export default class Document {
-  schema: string = 'document.'
   _logger: FastifyBaseLogger
   _pool: sql.ConnectionPool
 
@@ -23,15 +22,20 @@ export default class Document {
     r.input('itemnum', sql.VarChar, itemnum)
     r.input('language', sql.VarChar, language)
     r.input('size', sql.VarChar, size)
-    const result = await r.execute('GetDocumentGuidByParams')
 
-    if (result.recordsets[1] && result.recordsets[1].length > 0 && result.recordsets[1][0]) {
-      return {
-        error: result.recordset[0].error,
-        verified: result.recordset[0].verified,
-        result: result.recordsets[1][0][0] || []
+    try {
+      const result = await r.execute('GetDocumentGuidByParams')
+      if (result.recordsets[1] && result.recordsets[1].length > 0 && result.recordsets[1][0]) {
+        return {
+          error: result.recordset[0].error,
+          verified: result.recordset[0].verified,
+          result: result.recordsets[1][0][0] || []
+        }
       }
+    } catch {
+      this._logger.error('failed to get document guid!')
     }
+    this._logger.debug('falling back to 404 image UUID: "6258fae1-fbd0-45f1-8aef-68b76a30276e"!')
     return { result: { guid: '6258fae1-fbd0-45f1-8aef-68b76a30276e' } }
   }
 }
